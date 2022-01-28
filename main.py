@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel # to create models ,schemas for data
 
 #FastAPI
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi import Body
 
 app = FastAPI()
@@ -32,4 +32,15 @@ def home():
 @app.post('/pizza/new')
 def create_pizza(pizza : Pizza = Body(...)):
     return pizza
+
+# validations query
+
+@app.get('/pizza/detail')
+def show_pizza(
+    title : Optional[str] = Query(None, min_length=1,max_length=30)
+):
+    return {
+        
+        "title" : title
+    }
 
