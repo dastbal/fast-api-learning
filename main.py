@@ -1,28 +1,54 @@
 # Python
+from operator import gt, le
 from typing import Optional
+from enum import Enum
 
 # Pydantic
-from pydantic import BaseModel  # to create models ,schemas for data
+from pydantic import BaseModel, Field  # to create models ,schemas for data
 
 # FastAPI
-from fastapi import FastAPI, Path, Query
-from fastapi import Body
+from fastapi import FastAPI, Body, Path, Query
 
 app = FastAPI()
 
 # Models (schemas)
+# enum for the sizes of the pizza
+
+
+class Size(Enum):
+    big = "Familiar"
+    medium = "Mediana"
+    litle = "Personal"
+
+
+class City(Enum):
+    guayaquil = "Guayaquil"
+    duran = "Duran"
 
 
 class Pizza(BaseModel):
-    title: str
-    price: int
-    ingridients: list
-    description:  str
-    promotion: Optional[bool] = False
+    title: str = Field(
+        ...,
+        min_length=1,
+        max_length=40
+    )
+    price: int = Field(
+        ...,
+        gt=5,
+        le=20
+    )
+    ingridients: str = Field(
+        ...,
+        min_length=1,
+        max_length=200
+    )
+    size: Size = Field(default=Size.big)
+
+    promotion: Optional[bool] = Field(default=False)
 
 
 class Location(BaseModel):
-    city: str
+    city: City = Field(default=City.guayaquil)
     country: str
 
 
@@ -93,3 +119,5 @@ def update_pizza(
     result.update(location.dict())
     result.update({"pizza_id": pizza_id})
     return result
+
+# validations : Models
