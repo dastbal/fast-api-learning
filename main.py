@@ -21,6 +21,11 @@ class Pizza(BaseModel):
     promotion: Optional[bool] = False
 
 
+class Location(BaseModel):
+    city: str
+    country: str
+
+
 @app.get('/')
 def home():
     return {
@@ -68,3 +73,23 @@ def show_pizza(
 
         pizza_id: "Found"
     }
+
+
+# validations :  Request Body
+
+@app.put('/pizza/{pizza_id}')
+def update_pizza(
+    pizza_id: int = Path(
+        ...,
+        gt=0,
+        title='Pizza id',
+        description="pizza id"
+    ),
+    pizza: Pizza = Body(...),
+    location: Location = Body(...)
+
+):
+    result = pizza.dict()
+    result.update(location.dict())
+    result.update({"pizza_id": pizza_id})
+    return result
