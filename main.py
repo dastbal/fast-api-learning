@@ -1,4 +1,5 @@
 # Python
+from doctest import Example
 from operator import gt, le
 from typing import Optional
 from enum import Enum
@@ -35,7 +36,8 @@ class Pizza(BaseModel):
     price: int = Field(
         ...,
         gt=5,
-        le=20
+        le=20,
+        example=10
     )
     ingridients: str = Field(
         ...,
@@ -50,6 +52,15 @@ class Pizza(BaseModel):
 class Location(BaseModel):
     city: City = Field(default=City.guayaquil)
     country: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "city": "Guayaquil",
+                "country": "Ecuador",
+
+            }
+        }
 
 
 @app.get('/')
