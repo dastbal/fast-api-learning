@@ -1,6 +1,7 @@
 # Python
 from doctest import Example
 from operator import gt, le
+from turtle import st
 from typing import Optional
 from enum import Enum
 
@@ -27,7 +28,7 @@ class City(Enum):
     duran = "Duran"
 
 
-class Pizza(BaseModel):
+class PizzBase(BaseModel):
     title: str = Field(
         ...,
         min_length=1,
@@ -47,6 +48,19 @@ class Pizza(BaseModel):
     size: Size = Field(default=Size.big)
 
     promotion: Optional[bool] = Field(default=False)
+
+
+class PizzaOut(PizzBase):
+    pass
+
+
+class Pizza(PizzBase):
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=20,
+        example='davidsteven'
+    )
 
 
 class Location(BaseModel):
@@ -72,7 +86,9 @@ def home():
 # Request and responde Body
 
 
-@app.post('/pizza/new')
+@app.post(
+    path='/pizza/new',
+    response_model=PizzaOut)
 def create_pizza(pizza: Pizza = Body(...)):
     return pizza
 
