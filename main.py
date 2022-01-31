@@ -8,7 +8,7 @@ from enum import Enum
 from pydantic import BaseModel, Field  # to create models ,schemas for data
 
 # FastAPI
-from fastapi import FastAPI, Body, Path, Query, status
+from fastapi import FastAPI, Body, Path, Query, status, Form
 
 app = FastAPI()
 
@@ -74,6 +74,11 @@ class Location(BaseModel):
 
             }
         }
+
+
+class LoginOut(BaseModel):
+    userName: str = Field(..., max_length=20, example='carli657')
+    message: str = Field(default='Login Succesfully')
 
 
 @app.get(
@@ -159,4 +164,13 @@ def update_pizza(
     result.update({"pizza_id": pizza_id})
     return result
 
-# validations : Models
+
+@app.post(
+    path='/login',
+    response_model=LoginOut,
+    status_code=status.HTTP_200_OK
+
+
+)
+def login(userName: str = Form(...), password: str = Form(...)):
+    return LoginOut(userName=userName)
