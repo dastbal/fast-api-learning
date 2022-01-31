@@ -1,7 +1,6 @@
 # Python
 from doctest import Example
 from operator import gt, le
-from turtle import st
 from typing import Optional
 from enum import Enum
 
@@ -9,7 +8,7 @@ from enum import Enum
 from pydantic import BaseModel, Field  # to create models ,schemas for data
 
 # FastAPI
-from fastapi import FastAPI, Body, Path, Query
+from fastapi import FastAPI, Body, Path, Query, status
 
 app = FastAPI()
 
@@ -77,7 +76,10 @@ class Location(BaseModel):
         }
 
 
-@app.get('/')
+@app.get(
+    path='/',
+    status_code=status.HTTP_200_OK
+)
 def home():
     return {
         "title": "hello word"
@@ -88,6 +90,7 @@ def home():
 
 @app.post(
     path='/pizza/new',
+    status_code=status.HTTP_201_CREATED,
     response_model=PizzaOut)
 def create_pizza(pizza: Pizza = Body(...)):
     return pizza
@@ -95,7 +98,10 @@ def create_pizza(pizza: Pizza = Body(...)):
 # validations query
 
 
-@app.get('/pizza/detail')
+@app.get(
+    path='/pizza/detail',
+    status_code=status.HTTP_200_OK
+)
 def show_pizza(
     title: Optional[str] = Query(
         None,
@@ -113,7 +119,10 @@ def show_pizza(
 # validations path parameters
 
 
-@app.get('/pizza/detail/{pizza_id}')
+@app.get(
+    path='/pizza/detail/{pizza_id}',
+    status_code=status.HTTP_200_OK
+)
 def show_pizza(
     pizza_id: int = Path(
         ...,
@@ -130,7 +139,10 @@ def show_pizza(
 
 # validations :  Request Body
 
-@app.put('/pizza/{pizza_id}')
+@app.put(
+    path='/pizza/{pizza_id}',
+    status_code=status.HTTP_202_ACCEPTED
+)
 def update_pizza(
     pizza_id: int = Path(
         ...,
