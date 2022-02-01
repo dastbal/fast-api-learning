@@ -38,7 +38,7 @@ class PizzBase(BaseModel):
         le=20,
         example=10
     )
-    ingridients: str = Field(
+    ingredients: str = Field(
         ...,
         min_length=1,
         max_length=200
@@ -95,8 +95,21 @@ def home():
     path='/pizza/new',
     tags=["pizzas"],
     status_code=status.HTTP_201_CREATED,
-    response_model=PizzaOut)
+    response_model=PizzaOut,
+    summary="Create a new pizza")
 def create_pizza(pizza: Pizza = Body(...)):
+    """
+    Create Pizza
+
+    This path operation create a new pizza in 
+    the app and save the information in the database
+
+    Parameters:
+    - Request body parameter:
+        - **pizza: Pizza** -> a pizza model  with title , price, size , promotion, ingredient
+
+    Returns a Pizza model with title , price, size , promotion, ingredients
+    """
     return pizza
 # validations query
 
