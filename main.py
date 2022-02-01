@@ -117,7 +117,8 @@ def create_pizza(pizza: Pizza = Body(...)):
 @app.get(
     path='/pizza/detail',
     tags=["pizzas"],
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    deprecated=True  # to deprecated the code because was created a better new one
 )
 def show_pizza(
     title: Optional[str] = Query(
@@ -152,6 +153,20 @@ def show_pizza(
         description="pizza id"
     )
 ):
+    """ 
+    Show Pizza
+
+    This path operation show the pizza chosed by id
+
+    Args:
+        pizza_id (int, optional): . Defaults to Path( ..., gt=0, title='Pizza id', description="pizza id" ).
+
+    Raises:
+        HTTPException: if the pizza id it is not found raise  a error 404 .
+
+    Returns:
+        pizza_id: str
+    """
     # solving the error when the dara does not exist
     if pizza_id not in pizzas:
         raise HTTPException(
