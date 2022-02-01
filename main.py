@@ -88,22 +88,22 @@ def home():
     return {
         "title": "hello word"
     }
-
 # Request and responde Body
 
 
 @app.post(
     path='/pizza/new',
+    tags=["pizzas"],
     status_code=status.HTTP_201_CREATED,
     response_model=PizzaOut)
 def create_pizza(pizza: Pizza = Body(...)):
     return pizza
-
 # validations query
 
 
 @app.get(
     path='/pizza/detail',
+    tags=["pizzas"],
     status_code=status.HTTP_200_OK
 )
 def show_pizza(
@@ -128,6 +128,7 @@ pizzas = [1, 2, 3, 4, 5, 6]
 
 @app.get(
     path='/pizza/detail/{pizza_id}',
+    tags=["pizzas"],
     status_code=status.HTTP_200_OK
 )
 def show_pizza(
@@ -149,11 +150,12 @@ def show_pizza(
         pizza_id: "Found"
     }
 
-
 # validations :  Request Body
+
 
 @app.put(
     path='/pizza/{pizza_id}',
+    tags=["pizzas"],
     status_code=status.HTTP_202_ACCEPTED
 )
 def update_pizza(
@@ -212,7 +214,6 @@ def contact(
     ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
-
 
 # files
 
