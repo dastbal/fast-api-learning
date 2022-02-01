@@ -1,6 +1,4 @@
 # Python
-from doctest import Example
-from operator import gt, le
 from typing import Optional
 from enum import Enum
 
@@ -9,7 +7,7 @@ from enum import Enum
 from pydantic import BaseModel, EmailStr, Field
 
 # FastAPI
-from fastapi import Cookie, FastAPI, Body, File, Header, Path, Query, UploadFile, status, Form
+from fastapi import Cookie, HTTPException, FastAPI, Body, File, Header, Path, Query, UploadFile, status, Form
 
 app = FastAPI()
 
@@ -125,6 +123,9 @@ def show_pizza(
 # validations path parameters
 
 
+pizzas = [1, 2, 3, 4, 5, 6]
+
+
 @app.get(
     path='/pizza/detail/{pizza_id}',
     status_code=status.HTTP_200_OK
@@ -137,6 +138,12 @@ def show_pizza(
         description="pizza id"
     )
 ):
+    # solving the error when the dara does not exist
+    if pizza_id not in pizzas:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='this pizza does not exist'
+        )
     return {
 
         pizza_id: "Found"
